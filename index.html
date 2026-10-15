@@ -160,8 +160,9 @@
 
   <script>
     // ====== CONFIGURATION: replace with your own Supabase details ======
-    const SUPABASE_URL = "https://YOUR-PROJECT-REF.supabase.co";
-    const SUPABASE_ANON_KEY = "YOUR-ANON-PUBLIC-KEY";
+    const SUPABASE_URL = 'https://ovgkfpumbwneicglkxoe.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92Z2tmcHVtYnduZWljZ2xreG9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0Njk1MzMsImV4cCI6MjA5NjA0NTUzM30.UhHBm3ek0F1bv2vANyA1CC1e3FiI03C7J5x4uJbOULU';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const TABLE = "race_results";
     // ===================================================================
 
