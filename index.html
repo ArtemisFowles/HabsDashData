@@ -234,6 +234,15 @@
       cursor: pointer;
     }
     .empty { color: var(--muted); text-align: center; padding: 8px 0; }
+    .optional { font-weight: 400; color: var(--muted); }
+    .who .note {
+      display: block;
+      margin-top: 2px;
+      color: var(--navy);
+      font-weight: 600;
+      font-size: 0.9rem;
+      font-style: italic;
+    }
 
     /* ---------- Watermark logo ---------- */
     .watermark { text-align: center; padding: 8px 0 28px; }
@@ -279,6 +288,9 @@
       <label for="position">Finishing position</label>
       <input type="number" id="position" inputmode="numeric" min="1" step="1" placeholder="e.g. 24">
 
+      <label for="notes">Notes <span class="optional">(optional)</span></label>
+      <input type="text" id="notes" autocomplete="off" maxlength="200" placeholder="e.g. Ran in wrong heat">
+
       <button type="button" class="btn" id="addBtn">Add to list</button>
       <div class="msg" id="formMsg"></div>
     </section>
@@ -316,6 +328,7 @@
       runnerCode: $("runnerCode"),
       runnerName: $("runnerName"),
       position: $("position"),
+      notes: $("notes"),
       addBtn: $("addBtn"),
       submitBtn: $("submitBtn"),
       list: $("list"),
@@ -384,6 +397,7 @@
       const position = parseInt(els.position.value, 10);
       const code = els.runnerCode.value.trim();
       const name = els.runnerName.value.trim();
+      const notes = els.notes.value.trim();
 
       if (!Number.isInteger(position) || position < 1) {
         showMsg(els.formMsg, "Please enter a finishing position (1 or higher).", "error");
@@ -415,6 +429,7 @@
         runner_code: mode === "code" ? code : null,
         runner_name: mode === "name" ? name : null,
         position: position,
+        notes: notes || null,
         recorded_at: new Date().toISOString(), // time of recording
       };
       pending.push(entry);
@@ -427,6 +442,7 @@
       els.runnerCode.value = "";
       els.runnerName.value = "";
       els.position.value = "";
+      els.notes.value = "";
 
       if (warnings.length) {
         showMsg(els.formMsg, "Added, but check: " + warnings.join(" "), "warn");
@@ -435,7 +451,7 @@
     }
 
     els.addBtn.addEventListener("click", addEntry);
-    [els.runnerCode, els.runnerName, els.position].forEach((input) => {
+    [els.runnerCode, els.runnerName, els.position, els.notes].forEach((input) => {
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           e.preventDefault();
@@ -462,6 +478,12 @@
         const small = document.createElement("small");
         small.textContent = "Recorded " + formatTime(entry.recorded_at);
         who.appendChild(small);
+        if (entry.notes) {
+          const note = document.createElement("span");
+          note.className = "note";
+          note.textContent = "Note: " + entry.notes;
+          who.appendChild(note);
+        }
 
         const remove = document.createElement("button");
         remove.type = "button";
@@ -496,6 +518,7 @@
         runner_code: p.runner_code,
         runner_name: p.runner_name,
         position: p.position,
+        notes: p.notes || null,
         recorded_at: p.recorded_at,
       }));
 
